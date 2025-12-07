@@ -27,7 +27,7 @@ app.get("/health", (_req, res) => {
 app.use("/auth", authRoutes);
 app.use("/services", serviceRoutes);
 app.use("/bookings", bookingsRoutes);
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`API running on http://localhost:${PORT}`);
 });
