@@ -1,6 +1,37 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import {
+  CalendarDaysIcon,
+  ChartBarIcon,
+  Cog6ToothIcon,
+  HomeIcon,
+  Squares2X2Icon,
+  WrenchScrewdriverIcon,
+} from "@heroicons/react/24/outline";
+import type { ComponentType, SVGProps } from "react";
+import { MobileNav } from "./_components/MobileNav";
 import "./globals.css";
+
+type SidebarLink = {
+  label: string;
+  href: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+};
+
+const sidebarLinks: SidebarLink[] = [
+  { label: "Home", href: "/", icon: HomeIcon },
+  { label: "Bookings", href: "/bookings", icon: CalendarDaysIcon },
+  { label: "Services", href: "/services", icon: WrenchScrewdriverIcon },
+  { label: "My Services", href: "/myservices", icon: Squares2X2Icon },
+  { label: "Trending", href: "/trending", icon: ChartBarIcon },
+];
+
+const settingsLink: SidebarLink = {
+  label: "Settings",
+  href: "/settings",
+  icon: Cog6ToothIcon,
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +54,95 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[radial-gradient(circle_at_top,#f3f4ff_0%,#eef2ff_35%,#fefefe_100%)] text-slate-900 antialiased`}
       >
-        {children}
+        <div className="min-h-screen p-4 sm:p-6 lg:p-10">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 lg:flex-row lg:gap-8">
+            <aside className="hidden max-h-[85dvh] w-[20%] flex-col gap-8 rounded-[28px] border border-white/70 bg-white/80 p-6 text-slate-900 shadow-2xl shadow-slate-200/70 backdrop-blur-2xl lg:flex">
+              <div className="flex items-center gap-3">
+                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-linear-to-br from-indigo-500 to-violet-500 text-base font-semibold text-white">
+                  WG
+                </div>
+                <div>
+                  <p className="text-base font-semibold capitalize text-slate-900">
+                    we-got-you
+                  </p>
+                  <p className="text-sm text-slate-500">Concierge OS</p>
+                </div>
+              </div>
+
+              <nav aria-label="Primary navigation">
+                <ul className="flex flex-col gap-2">
+                  {sidebarLinks.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="flex items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-indigo-100 hover:bg-indigo-50"
+                      >
+                        <item.icon
+                          className="h-5 w-5 text-slate-400"
+                          aria-hidden="true"
+                        />
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              <div className="mt-auto pt-4">
+                <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
+                  Account
+                </p>
+                <Link
+                  href={settingsLink.href}
+                  className="mt-2 flex items-center gap-3 rounded-2xl border border-transparent px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-200 hover:bg-slate-50"
+                >
+                  <settingsLink.icon
+                    className="h-5 w-5 text-slate-400"
+                    aria-hidden="true"
+                  />
+                  <span>{settingsLink.label}</span>
+                </Link>
+              </div>
+            </aside>
+
+            <div className="flex flex-1 flex-col gap-6">
+              <header className="rounded-[28px] border border-white/80 bg-white/90 p-4 shadow-xl shadow-slate-200/60 backdrop-blur">
+                <div className="mt-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                      Active city
+                    </p>
+                    <div className="mt-1 flex items-center gap-2 font-semibold text-slate-900">
+                      <span>San Francisco</span>
+                      <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.2)]" />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      className="rounded-2xl border border-slate-200/80 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-slate-300"
+                    >
+                      Log in
+                    </button>
+                    <button
+                      type="button"
+                      className="rounded-2xl bg-linear-to-r from-indigo-500 to-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30"
+                    >
+                      Sign up
+                    </button>
+                  </div>
+                </div>
+              </header>
+
+              <main className="flex flex-1 flex-col gap-6">{children}</main>
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   );
